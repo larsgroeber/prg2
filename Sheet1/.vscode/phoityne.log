@@ -1,0 +1,4 @@
+2018-04-11 18:19:11 [ThreadId 11] ERROR phoityne - [deleteBreakPointOnGHCi] invalid delete break point. BreakPointData {nameBreakPointData = "Main", srcPosBreakPointData = SourcePosition {filePathSourcePosition = "/Users/lars/Documents/Uni/PRG2/Exercises/Sheet1/app/Main.hs", startLineNoSourcePosition = 6, startColNoSourcePosition = -1, endLineNoSourcePosition = -1, endColNoSourcePosition = -1}, breakNoBreakPointData = Nothing, conditionBreakPointData = Nothing, hitConditionBreakPointData = Nothing, hitCountBreakPointData = 0}
+2018-04-11 18:58:28 [ThreadId 11] ERROR phoityne - load file fail.[/Users/lars/Documents/Uni/PRG2/Exercises/Sheet1/test/Spec.hs]
+2018-04-11 18:58:28 [ThreadId 11] ERROR phoityne - startup load error. /Users/lars/Documents/Uni/PRG2/Exercises/Sheet1/test/Spec.hs
+
