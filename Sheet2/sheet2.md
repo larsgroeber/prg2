@@ -20,11 +20,11 @@ Blatt 2 - Lars Gröber
 
 ## c)
 
-f1 und f5 sind direkt rekursiv.
+f1 und f4 sind direkt rekursiv.
 
 ## d)
 
-f1, f3, f4 und f5 sind rekursiv.
+f1, f2, f3, f4 und f5 sind rekursiv.
 
 ## e)
 
@@ -45,9 +45,8 @@ f1, f3, f4 und f5 sind rekursiv.
 ## b)
 
 ```haskell
-hIter r x = if x < 10 then r else hIter (r + 2 * x) (x - 1)
-
-h' = hIter 0
+h' x = if x < 10 then 0 else g' (2*x) (x-1)
+g' x y = if y < 10 then x else g' (2*x) (x-1)
 ```
 
 # Aufgabe 3
@@ -219,7 +218,7 @@ else f 1 (f 1 1 (203+100)) (203+9)) (103+9)) (3+9)`
 then (if 203 < 27 then 1*203 else f 1 (f 1 1 (203+100)) (203+9))
 else f 1 (f 1 1 (203+100)) (203+9)) (103+9)) (3+9)`
 
-Ab hier endlose weitere Auswertung, da der innere if-Ausdruck nie zu True ausgewertet wird.
+Ab hier endlose weitere Auswertung, da der innere if-Ausdruck nie zu True ausgewertet wird und deshalb der nicht verwendete Ausdruck in b wieder rekursiv ausgewertet werden muss.
 
 ## c)
 
