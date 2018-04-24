@@ -39,8 +39,8 @@ f1, f3, f4 und f5 sind rekursiv.
 | ist iterativ                   | ja   | nein | nein | nein |
 | ist endrekursiv                | ja   | nein | nein | nein |
 | ist linear rekursiv            | ja   | ja   | nein | nein |
-| ist Baum-rekursiv              | nein | nein | nein | ja   |
-| ist geschachtelt Baum-rekursiv | nein | nein | ja   | nein |
+| ist Baum-rekursiv              | ja   | ja   | nein | ja   |
+| ist geschachtelt Baum-rekursiv | ja   | ja   | ja   | ja   |
 
 ## b)
 
@@ -102,8 +102,14 @@ else f 1 (f 1 1 ((3+9)+100)) ((3+9)+9)`
 then (if ((3+9)+9) < 27 then 1*((3+9)+9) else f 1 (f 1 1 (((3+9)+9)+100)) (((3+9)+9)+9))
 else f 1 (f 1 1 (((3+9)+9)+100)) (((3+9)+9)+9)`
 
--> A * 2
+-> A
 
+`if (12+9) >= 21
+then (if ((3+9)+9) < 27 then 1*((3+9)+9) else f 1 (f 1 1 (((3+9)+9)+100)) (((3+9)+9)+9))
+else f 1 (f 1 1 (((3+9)+9)+100)) (((3+9)+9)+9)`
+
+-> A
+ 
 `if 21 >= 21
 then (if ((3+9)+9) < 27 then 1*((3+9)+9) else f 1 (f 1 1 (((3+9)+9)+100)) (((3+9)+9)+9))
 else f 1 (f 1 1 (((3+9)+9)+100)) (((3+9)+9)+9)`
@@ -118,7 +124,11 @@ else f 1 (f 1 1 (((3+9)+9)+100)) (((3+9)+9)+9)`
 
 `if ((3+9)+9) < 27 then 1*((3+9)+9) else f 1 (f 1 1 (((3+9)+9)+100)) (((3+9)+9)+9)`
 
--> A * 2
+-> A
+
+`if (12+9) < 27 then 1*((3+9)+9) else f 1 (f 1 1 (((3+9)+9)+100)) (((3+9)+9)+9)`
+
+-> A
 
 `if 21 < 27 then 1*((3+9)+9) else f 1 (f 1 1 (((3+9)+9)+100)) (((3+9)+9)+9)`
 
@@ -130,7 +140,15 @@ else f 1 (f 1 1 (((3+9)+9)+100)) (((3+9)+9)+9)`
 
 `1*((3+9)+9)`
 
--> A * 3
+-> A
+
+`1*(12+9)`
+
+-> A
+
+`1*(21)`
+
+-> A
 
 `21`
 
@@ -255,7 +273,11 @@ else f (1+1) (f (1+1) (1+1) (26+100)) (26+9)`
 
 `(1+1)*26`
 
--> A * 2
+-> A
+
+`2*26`
+
+-> A
 
 `52`
 
@@ -263,6 +285,9 @@ else f (1+1) (f (1+1) (1+1) (26+100)) (26+9)`
 ## d)
 
 ```haskell
+g :: Int -> Int -> Int -> Int
+-- Funktion f mit drei Argumenten und ohne doppeltes if
+-- g 1 2 3 soll 21 ergeben
 g a b c = if c >= 21 && c < 27
     then a*c
     else f a (f a a (c+100)) (c+9)
