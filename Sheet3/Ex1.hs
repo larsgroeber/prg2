@@ -80,20 +80,57 @@
     -- -
     -- - a)
     -- - 
-    
-    g1 = undefined -- zu implementieren!
+
+    g1It :: [Int] -> [Int] -> [Int]
+    -- iterative helper function for g1
+    g1It [] acc = acc
+    g1It [x] acc = acc ++ [x]
+    g1It (x:(y:xs)) acc = g1It xs (acc ++ [y, x])
+
+    g1 :: [Int] -> [Int]
+    -- Funktion die eine Liste an Ints erhält und benachbarte Elemente vertauscht
+    -- Beispiel: g1 [1, 2, 3] soll [2, 1, 3] ergeben
+    g1 x = g1It x []
     
     -- -
     -- - b)
     -- -
+
+    sumFirst :: [[Int]] -> Int -> Int
+    -- function that sums the first elements of a list of lists of ints
+    sumFirst [] acc = acc
+    sumFirst ((x:xs):xss) acc = sumFirst xss (acc + x)
     
-    g2 = undefined -- zu implementieren!
+    g2It :: [[[Int]]] -> Int -> Int
+    -- iterativ helper function for g2
+    g2It [] acc = acc
+    g2It (x:xsss) acc = g2It xsss ((sumFirst x 0) + acc)
+
+    g2 :: [[[Int]]] -> Int
+    -- Funktion, die eine Liste an Listen an Listen von Ints erhält und die ersten Elemente
+    -- der innersten Liste addiert
+    -- Beispiel: g2 [[[1,2], [3]], [[4, 3]]] soll 8 ergeben
+    g2 x = g2It x 0
     
     -- -
     -- - c)
     -- -
     
-    g3 = undefined -- zu implementieren!
+    charXTimes :: Char -> Int -> String
+    -- function that returns a string with a given character X-Times repeated
+    charXTimes c 1 = [c]
+    charXTimes c x = c : charXTimes c (x - 1)
+
+    g3It :: String -> String -> Int -> String
+    -- iterative helper function for g3
+    g3It [] acc index = acc
+    g3It (x:xs) acc index = g3It xs (acc ++ charXTimes x index) (index + 1)
+
+    g3 :: String -> String
+    -- Funktion die einen String erhält und einen String zurückgibt, in dem der k-te Buchstabe
+    -- k-mal vorkommt
+    -- Beispiel: g ['a', 'b', 'c'] soll "abbccc" ergeben
+    g3 x = g3It x "" 1
     
     -- =
     -- =
