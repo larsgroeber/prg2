@@ -3,9 +3,11 @@
 -- Aufgabenblatt 3 - Lars Gröber
 -- =============================================================================
 
-    module Ex1 where
+    module Sheet3 where
 
     import Data.Char
+    import Data.List
+    import Debug.Trace
 
     -- =============================================================================
     -- =
@@ -142,6 +144,10 @@
     -- =
     
     -- Beispiel-Legs.
+    leg1 :: [[[Int]]]
+    leg2 :: [[[Int]]]
+    leg3 :: [[[Int]]]
+    leg4 :: [[[Int]]]
     leg1 = [[[3,20],[3,20],[3,20]], [[3,20],[3,19],[2,25]], [[3,19],[3,19],[3,19]],
             [[3,20],[3,19],[2,25]], [[2,25],[2,25],[2,25]]]
     leg2 = [[[3,20],[3,20],[3,20]], [[3,20],[3,19],[2,25]], [[3,19],[3,19],[3,19]],
@@ -156,14 +162,81 @@
     -- -
     -- - a)
     -- -
+
+    startingPoints = 501
+    maxPoints = 20
+    bullsEye = 25
+
+    throwIllegal :: [Int] -> Bool
+    -- checks if a given throw is illegal
+    throwIllegal [x, y] = y > maxPoints && y /= bullsEye || y < 1 || x > 3 || x < 1 || y == bullsEye && x > 2
     
-    legSieger = undefined -- zu implementieren!
+    roundIllegal :: [Int] -> [[Int]] -> Bool
+    -- checks if a given round is illegal
+    roundIllegal points rounds = any (==0) points || any throwIllegal rounds
+
+    pointsAfterThrow :: Int -> [Int] -> Int
+    -- returns the points after a given throw
+    pointsAfterThrow points [x, y] = if remaining >= 0 
+        then remaining 
+        else points where remaining = points - x * y
+    
+    pointsAfterRound :: [[Int]] -> Int -> Int
+    -- returns the points after a given round
+    pointsAfterRound round points = foldl pointsAfterThrow points round
+    
+    currentPlayer :: Int -> Int
+    -- returns the current player from the given roundnumber
+    currentPlayer roundNumber = roundNumber `mod` 2
+
+    oneRound :: [Int] -> Int -> [[Int]] -> [Int]
+    -- "plays" one round and returns the current points
+    oneRound points roundNumber round = if currentPlayer roundNumber == 0 
+        then [pointsAfterRound round (head points), last points] 
+        else [head points, pointsAfterRound round (last points)]
+
+    nextRound :: [Int] -> Int -> [[[Int]]] -> Int
+    nextRound points roundNumber [] | head points == 0 = 1
+                                    | last points == 0 = 2
+                                    | otherwise = 0
+    nextRound points roundNumber rounds | roundIllegal points (head rounds) = 0
+                                        | otherwise = nextRound (oneRound points roundNumber (head rounds)) 
+                                        (roundNumber + 1) (tail rounds)
+
+    legSieger :: [[[Int]]] -> Int
+    -- Funktion, die eine Liste an Rounds (Liste von Listen von Ints) entgegen nimmt und den
+    -- Gewinner ermittelt.
+    -- Beispiel legSieger leg1 soll 1 ergeben
+    legSieger = nextRound [startingPoints, startingPoints] 0
     
     -- -
     -- - b)
     -- - 
     
-    highOut = undefined -- zu implementieren!
+
+
+    getWinningLegs :: [[[[Int]]]] -> Int -> [[[[Int]]]] -> [[[[Int]]]]
+    -- returns all winning legs for the player who starts the first one or an empty leg
+    getWinningLegs [] player [] = [[[]]]
+    getWinningLegs [] player acc = acc
+    getWinningLegs legs player acc = if legSieger leg == player 
+        then getWinningLegs remaining nextPlayer (acc ++ [leg])
+        else getWinningLegs remaining nextPlayer acc
+        where leg = head legs
+              remaining = tail legs
+              nextPlayer = (player `mod` 2) + 1
+
+
+    getFinish :: [[[Int]]] -> Int
+    -- returns the points scored in last round
+    getFinish leg = 500 - pointsAfterRound (last leg) 500
+
+
+    highOut :: [[[[Int]]]] -> Int
+    -- Funktion, die eine Liste an Legs erhält und den höchsten Finish für den Spieler
+    -- der das erste Leg beginnt zurückgibt
+    -- Beispiel: highOut [leg4] soll 0 ergeben
+    highOut plays = maximum (map getFinish (getWinningLegs plays 1 []))
     
     -- =
     -- =
