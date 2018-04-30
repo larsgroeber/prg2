@@ -36,6 +36,7 @@ main = hspec $ do
         it "works" $ do
             g2 [[[1,2], [3]], [[4, 3]]] `shouldBe` 8
             g2 [[[1,2], [4,5], [7,8,9]], [[13, 15], [19]]] `shouldBe` 44
+            g2 [[[2,2], [3,5], [10,8,9]], [[13, 15], [19]]] `shouldBe` 47
 
     describe "g3" $ do
         it "works" $ do
@@ -84,7 +85,10 @@ main = hspec $ do
             legSieger leg1 `shouldBe` 1
             legSieger leg2 `shouldBe` 2
             legSieger leg3 `shouldBe` 1
+            legSieger [[[1,1], [1,2], [1,3]]] `shouldBe` 0
 
         it "highout" $ do
             highOut  [leg3,leg2,leg3,leg4,leg3] `shouldBe` 167
+            highOut  [leg3,leg3,leg3] `shouldBe` 120
             highOut  [leg4,leg3] `shouldBe` 0
+            highOut  [leg4] `shouldBe` 0

@@ -18,6 +18,7 @@
     -- - a)
     -- -
     
+    f1_help :: String -> Int
     -- helper function fo f1
     f1_help (x:xs) | isDigit x = digitToInt x + f1 xs
                    | x == 'a' =  1 + f1 xs
@@ -30,6 +31,15 @@
     f1 x | null x = 0
          | otherwise = f1_help x
     
+    {-
+    Testfälle:
+    -- nutze Hspec (https://hspec.github.io/), daher das `shouldBe`
+    f1 "138aza" `shouldBe` 14
+    f1 ""       `shouldBe` 0
+    f1 "aaaa"   `shouldBe` 4
+    f1 "zzzz1"  `shouldBe` 1
+    -}
+
     -- -
     -- - b)
     -- - 
@@ -49,6 +59,15 @@
     -- Beispiel: f2 "Test!", "Test"] soll ["TEST!", "Test"] ergeben
     f2 = map convertToUpperIfExcalmation
     
+    {-
+    Testfälle:
+    f2 ["Test!", "Test"]            `shouldBe` ["TEST!", "Test"]
+    f2 ["!", "Test"]                `shouldBe` ["!", "Test"]
+    f2 ["Test", "Test"]             `shouldBe` ["Test", "Test"]
+    f2 ["Test", ""]                 `shouldBe` ["Test", ""]
+    f2 ["Test test test !", "test"] `shouldBe` ["TEST TEST TEST !", "test"]
+    -}
+
     -- -
     -- - c)
     -- -
@@ -69,6 +88,13 @@
     -- Liste an Ints konvertiert.
     -- Beispiel: f3 [[1,2], [4..8], [5..10]] soll [8, 7, 6, 10, 9, 8] ergeben
     f3 x = flatten (keepFirstThree (reverseAllLists (filterForListsLongerThanThree x)))
+
+    {-
+    Testfälle
+    f3 [[1,2], [4..8], [5..10]]         `shouldBe` [8, 7, 6, 10, 9, 8]
+    f3 [[], [4..8], [5..10]]            `shouldBe` [8, 7, 6, 10, 9, 8]
+    f3 [[1,2], [1..4], [6..8], [8..12]] `shouldBe` [4, 3, 2, 12, 11, 10]
+    -}
     
     -- =
     -- =
@@ -93,6 +119,14 @@
     -- Funktion die eine Liste an Ints erhält und benachbarte Elemente vertauscht
     -- Beispiel: g1 [1, 2, 3] soll [2, 1, 3] ergeben
     g1 x = g1It x []
+
+    {-
+    Testfälle
+    g1 [1, 2, 3, 4] `shouldBe` [2, 1, 4, 3]
+    g1 [1, 2, 3]    `shouldBe` [2, 1, 3]
+    g1 []           `shouldBe` []
+    g1 [1]          `shouldBe` [1]
+    -}
     
     -- -
     -- - b)
@@ -114,6 +148,13 @@
     -- Beispiel: g2 [[[1,2], [3]], [[4, 3]]] soll 8 ergeben
     g2 x = g2It x 0
     
+    {-
+    Testfälle
+    g2 [[[1,2], [3]], [[4, 3]]]                     `shouldBe` 8
+    g2 [[[1,2], [4,5], [7,8,9]], [[13, 15], [19]]]  `shouldBe` 44
+    g2 [[[2,2], [3,5], [10,8,9]], [[13, 15], [19]]] `shouldBe` 47
+    -}
+
     -- -
     -- - c)
     -- -
@@ -133,6 +174,14 @@
     -- k-mal vorkommt
     -- Beispiel: g ['a', 'b', 'c'] soll "abbccc" ergeben
     g3 x = g3It x "" 1
+
+    {-
+    Testfälle
+    g3 ['a', 'b', 'c']      `shouldBe` "abbccc"
+    g3 []                   `shouldBe` ""
+    g3 ['a']                `shouldBe` "a"
+    g3 ['a', 'b', 'c', 'd'] `shouldBe` "abbcccdddd"
+    -}
     
     -- =
     -- =
@@ -173,7 +222,7 @@
     
     roundIllegal :: [Int] -> [[Int]] -> Bool
     -- checks if a given round is illegal
-    roundIllegal points rounds = any (==0) points || any throwIllegal rounds
+    roundIllegal points rounds = elem 0 points || any throwIllegal rounds
 
     pointsAfterThrow :: Int -> [Int] -> Int
     -- returns the points after a given throw
@@ -196,6 +245,8 @@
         else [head points, pointsAfterRound round (last points)]
 
     nextRound :: [Int] -> Int -> [[[Int]]] -> Int
+    -- "plays" the actual game and keeps track of points
+    -- game over pattern
     nextRound points roundNumber [] | head points == 0 = 1
                                     | last points == 0 = 2
                                     | otherwise = 0
@@ -208,12 +259,18 @@
     -- Gewinner ermittelt.
     -- Beispiel legSieger leg1 soll 1 ergeben
     legSieger = nextRound [startingPoints, startingPoints] 0
+
+    {-
+    Testfälle
+    legSieger leg1                      `shouldBe` 1
+    legSieger leg2                      `shouldBe` 2
+    legSieger leg3                      `shouldBe` 1
+    legSieger [[[1,1], [1,2], [1,3]]]   `shouldBe` 0
+    -}
     
     -- -
     -- - b)
     -- - 
-    
-
 
     getWinningLegs :: [[[[Int]]]] -> Int -> [[[[Int]]]] -> [[[[Int]]]]
     -- returns all winning legs for the player who starts the first one or an empty leg
@@ -228,8 +285,9 @@
 
 
     getFinish :: [[[Int]]] -> Int
-    -- returns the points scored in last round
-    getFinish leg = 500 - pointsAfterRound (last leg) 500
+    -- returns the points scored in last round (one cannot score higher than 9*maxPoints)
+    getFinish leg = mP - pointsAfterRound (last leg) mP 
+        where mP = 9 * maxPoints
 
 
     highOut :: [[[[Int]]]] -> Int
@@ -237,6 +295,14 @@
     -- der das erste Leg beginnt zurückgibt
     -- Beispiel: highOut [leg4] soll 0 ergeben
     highOut plays = maximum (map getFinish (getWinningLegs plays 1 []))
+
+    {-
+    Testfälle:
+    highOut  [leg3,leg2,leg3,leg4,leg3] `shouldBe` 167
+    highOut  [leg3,leg3,leg3]           `shouldBe` 120
+    highOut  [leg4,leg3]                `shouldBe` 0
+    highOut  [leg4]                     `shouldBe` 0
+    -}
     
     -- =
     -- =
