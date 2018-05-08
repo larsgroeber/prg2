@@ -18,6 +18,8 @@
     
     -- Unvollst"andige gegebene List-Comprehension: [(a,b,c,d,e,f,g) | a <- [1..7], ]
     
+    wege :: [(Int, Int, Int, Int, Int, Int, Int)]
+    -- Gibt die möglichen Wege zurück
     wege = [(a,b,c,d,e,f,g) | 
       a <- [1..7], a == 7,    -- first step should be 7
       b <- [4..6],            -- b,c,d can only take 4,5 or 6
@@ -56,6 +58,7 @@
     -- - 
 
     tragetasche :: Tragetasche
+    -- Die gefordertee Tragetrasche
     tragetasche = Tragetasche [Lieferung (Objekt True 30 (0.50,0.50,0.50)) 100 "Eden Village", 
       Lieferung (Objekt False 15 (2.20, 3.24, 0.05)) 100 "Eden Village"]
     
@@ -63,21 +66,40 @@
     -- - b2)
     -- - 
     weightLieferung :: Lieferung -> Gewicht
+    -- Gibt das Gewicht einer Lieferung zurück
     weightLieferung (Lieferung (Objekt _ weight _) _ _) = weight
 
     gesamtGewicht :: Tragetasche -> Float
+    -- Gibt das Gesamtgewicht einer Lieferung zurück
     gesamtGewicht (Tragetasche lieferungen) = foldl (\acc l -> acc + weightLieferung l) 0 lieferungen
     
+    {-
+    Testfälle:
+    gesamtGewicht (tragetasche)                                               `shouldBe` 45
+    gesamtGewicht (Tragetasche [])                                            `shouldBe` 0
+    gesamtGewicht (Tragetasche [Lieferung (Objekt True 100 (0,0,0)) 100 ""])  `shouldBe` 100
+    -}
+
     -- -
     -- - b3)
     -- - 
     changeZerbrechlich :: Abmessungen -> Lieferung -> Lieferung
+    -- Markiert eine Lieferung als zerbrechlich, wenn die Abmessung stimmt
     changeZerbrechlich abmessung (Lieferung (Objekt zerbrechlich w a) m g) = 
       Lieferung (Objekt (zerbrechlich || abmessung == a) w a) m g
 
     aendereZerbrechlich :: Tragetasche -> Abmessungen -> Tragetasche
+    -- Ändert alle Lieferungen zu zerbrechlich, wenn die Abmessung übereinstimmt
     aendereZerbrechlich (Tragetasche lieferungen) abmessung = Tragetasche (map (changeZerbrechlich abmessung) lieferungen)  
     
+    {-
+    Testfälle:
+    aendereZerbrechlich (Tragetasche [Lieferung (Objekt False 100 (30, 30, 30)) 100 ""]) (30,30,30)
+                `shouldBe` (Tragetasche [Lieferung (Objekt True 100 (30, 30, 30)) 100 ""])
+    aendereZerbrechlich (Tragetasche [Lieferung (Objekt False 100 (30, 30, 30)) 100 "", Lieferung (Objekt True 100 (30, 20, 30)) 100 ""]) (30,30,30)
+                `shouldBe` (Tragetasche [Lieferung (Objekt True 100 (30, 30, 30)) 100 "",  Lieferung (Objekt True 100 (30, 20, 30)) 100 ""])
+    -}
+
     -- =
     -- =
     -- =============================================================================
