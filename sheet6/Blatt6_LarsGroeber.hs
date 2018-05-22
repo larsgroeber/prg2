@@ -1,5 +1,6 @@
 -- ============================================================================
 -- Grundlagen der Programmierung 2 
+-- Lars Gröber
 -- Aufgabenblatt 6
 -- ============================================================================
 
@@ -92,7 +93,3 @@
   vergleiche "Schelle" "Schelle;Schelle;Schelle;Schlag auf Bauch" `shouldBe` ("","Terence","","Terence")
   vergleiche "Dampfhammer;Dampfhammer" "Schelle;Schelle;Schelle;Schlag auf Bauch" `shouldBe` ("Bud","Terence","","Terence")
   -}
-
-  -- =
-  -- =
-  -- =============================================================================
