@@ -18,8 +18,13 @@ main = hspec $ do
           (";Drehung 45;Dampfhammer",(1,1,0,0)),
           ("",(2,1,0,0)),
           ("",(2,1,0,0))]
+        parseAttackenC "Schelle" `shouldBe` [("",(0,1,0,0))]
+        parseAttackenC "" `shouldBe` []
+        parseAttackenC "Schelle;Dampfhammer" `shouldBe` [(";Dampfhammer",(0,1,0,0)),("",(1,1,0,0)),("",(1,1,0,0))]
             
 
-    -- describe "vergleiche" $ do
-    --   it "works" $ do
-    --       allaggr testBaum `shouldBe` True
+    describe "vergleiche" $ do
+      it "works" $ do
+        vergleiche "Schelle;Schlag auf Bauch;Dampfhammer" "Schelle;Schelle;Schelle;Schlag auf Bauch" `shouldBe` ("Bud","Terence","","")
+        vergleiche "Schelle" "Schelle;Schelle;Schelle;Schlag auf Bauch" `shouldBe` ("","Terence","","Terence")
+        vergleiche "Dampfhammer;Dampfhammer" "Schelle;Schelle;Schelle;Schlag auf Bauch" `shouldBe` ("Bud","Terence","","Terence")
