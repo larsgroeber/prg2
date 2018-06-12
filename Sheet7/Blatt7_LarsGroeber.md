@@ -84,7 +84,7 @@ pushK 1
 push 0
 pushK -1
 
-# 3 What do I learn here?
+# 3
 pop
 pop
 -
@@ -101,7 +101,7 @@ pushK 1
 pushK 1
 pushK -1
 
-# 4 Why am I doing this?
+# 4
 +
 pushK -1
 
@@ -109,7 +109,7 @@ pushK -1
 -
 pushK -1
 
-# 5 Am I missing something?
+# 5
 +
 *
 *
@@ -127,7 +127,7 @@ push 0
 push 0
 pushK -1
 
-# 6 Is there a better way?
+# 6
 +
 *
 push 1
@@ -141,8 +141,7 @@ pushK 1
 pushK 1
 pushK -1
 
-# 7 Also why giving us an exercise which you cannot test properly w/o 
-#   putting breaks everywhere?
+# 7 
 +
 *
 *

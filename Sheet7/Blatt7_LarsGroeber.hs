@@ -25,9 +25,13 @@
   type Stack = [Int]
   
   run :: StackProgramm -> Stack
+  -- Funktion, die ein Stackprogramm entgegen nimmt, ausführt und den Ergebnisstack zurückgibt.
+  -- Beispiel: run [PushK 1] soll [1] ergeben
   run programm = interpretiere programm [] programm
   
   interpretiere :: StackProgramm -> Stack -> StackProgramm -> Stack
+  -- Funktion, die die Funktion I einer Stackmaschine implementiert.
+  -- Beispiel: interpretiere [PushK 1] [] [PushK 1] soll [1] ergeben.
   interpretiere [] a prg = a
   interpretiere (PushK i : xs) a prg = interpretiere xs (i:a) prg
   interpretiere (Pop : xs) a prg = interpretiere xs (tail a) prg
@@ -40,6 +44,14 @@
   interpretiere (Branchz m : xs) a prg = if 0 == head a then interpretiere (dropWhile (Mark m /=) prg) (tail a) prg
                                         else interpretiere xs (tail a) prg
   interpretiere (Slide i j : xs) a prg = interpretiere xs (take i a ++ drop (j + i) a) prg
+
+  {-
+  Testfälle:
+  run test1a                  `shouldBe` [2]
+  run [PushK 1]               `shouldBe` [1]
+  run [PushK 1, Push 0, Add]  `shouldBe` [2]
+  run [PushK 2, PushK 3, Sub] `shouldBe` [-1]
+  -}
   
   -- Zum Testen von Aufgabenteil a).
   test1a = 
